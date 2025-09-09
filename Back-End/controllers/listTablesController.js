@@ -164,4 +164,9 @@ const removeFromList = async (req, res) => {
   res.status(200).json({ message: "Item removed from list" });
 };
 
-module.exports = { addToList, getAllListTitles, removeFromList };
+module.exports = {
+  addToList,
+  getAllListTitles,
+  removeFromList,
+  getOrInsertTitleId,
+};

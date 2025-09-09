@@ -15,5 +15,8 @@ app.use("/api/user", UserRoutes);
 const ListTableRoutes = require("./routes/listTables.js");
 app.use("/api/list", ListTableRoutes);
 
+const PreviousRecommendationsRoutes = require("./routes/previousRecommendations.js");
+app.use("/api/previousRecommendations", PreviousRecommendationsRoutes);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
