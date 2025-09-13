@@ -3,7 +3,7 @@ const router = express.Router();
 const {
   createUser,
   updateUser,
-} = require("../controllers/UsersTableController.js");
+} = require("../controllers/usersTableController.js");
 
 router.post("/createUser", createUser);
 router.post("/updateUser", updateUser);
