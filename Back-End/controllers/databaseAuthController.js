@@ -10,9 +10,21 @@ const loginUser = async (req, res) => {
 
   if (error) return res.status(401).json({ error: error.message });
 
+  // HTTP-only cookies
+  res.cookie("access_token", data.session.access_token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 60 * 60 * 1000, // 1 hour
+  });
+  res.cookie("refresh_token", data.session.refresh_token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
+  });
+
   res.json({
-    access_token: data.session.access_token,
-    refresh_token: data.session.refresh_token,
     user: data.user,
   });
 };
@@ -30,9 +42,9 @@ const signUp = async (req, res) => {
 };
 
 const refreshAccessToken = async (req, res) => {
-  const { refresh_token } = req.body;
+  const refresh_token = req.cookies && req.cookies.refresh_token;
   if (!refresh_token) {
-    return res.status(400).json({ error: "refresh_token is required" });
+    return res.status(400).json({ error: "No refresh token cookie provided." });
   }
 
   const { data, error } = await adminClient.auth.refreshSession({
@@ -40,9 +52,21 @@ const refreshAccessToken = async (req, res) => {
   });
   if (error) return res.status(401).json({ error: error.message });
 
+  // HTTP-only cookies
+  res.cookie("access_token", data.session.access_token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 60 * 60 * 1000, // 1 hour
+  });
+  res.cookie("refresh_token", data.session.refresh_token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
+  });
+
   res.json({
-    access_token: data.session.access_token,
-    refresh_token: data.session.refresh_token,
     user: data.user,
   });
 };

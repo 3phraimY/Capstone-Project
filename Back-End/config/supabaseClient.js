@@ -7,18 +7,10 @@ const adminClient = createClient(
 );
 
 async function getSupabaseClient(req) {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader) {
-    const err = new Error("No Authorization header provided.");
-    err.status = 401;
-    throw err;
-  }
-
-  const accessToken = authHeader.replace("Bearer ", "").trim();
+  const accessToken = req.cookies && req.cookies.access_token;
 
   if (!accessToken) {
-    const err = new Error("Missing or invalid access token");
+    const err = new Error("No access token cookie provided.");
     err.status = 401;
     throw err;
   }

@@ -6,6 +6,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
 const DatabaseAuthRoutes = require("./routes/databaseAuth.js");
 app.use("/api/auth", DatabaseAuthRoutes);
 
