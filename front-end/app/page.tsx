@@ -1,9 +1,14 @@
+import CheckAuth from './components/CheckAuth'
+
 export default function Home() {
   return (
-    <>
-      <div>New Site</div>
-
-      <button className='btn btn-accent'>test</button>
-    </>
+    <CheckAuth>
+      {userId => (
+        <>
+          <div>Home</div>
+          <button className='btn btn-accent'>test</button>
+        </>
+      )}
+    </CheckAuth>
   )
 }
