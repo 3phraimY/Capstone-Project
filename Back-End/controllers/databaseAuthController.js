@@ -14,13 +14,13 @@ const loginUser = async (req, res) => {
   // HTTP-only cookies
   res.cookie("access_token", data.session.access_token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     sameSite: "lax",
     maxAge: 60 * 60 * 1000, // 1 hour
   });
   res.cookie("refresh_token", data.session.refresh_token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     sameSite: "lax",
     maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
   });
@@ -75,13 +75,13 @@ const refreshAccessToken = async (req, res) => {
   // HTTP-only cookies
   res.cookie("access_token", data.session.access_token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     sameSite: "lax",
     maxAge: 60 * 60 * 1000, // 1 hour
   });
   res.cookie("refresh_token", data.session.refresh_token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
     sameSite: "lax",
     maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
   });

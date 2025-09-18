@@ -164,9 +164,37 @@ const removeFromList = async (req, res) => {
   res.status(200).json({ message: "Item removed from list" });
 };
 
+const searchTitleByImdbId = async (req, res) => {
+  const { imdbId } = req.query;
+
+  if (!imdbId) {
+    return res.status(400).json({ error: "imdbId is required" });
+  }
+
+  let supabase;
+  try {
+    supabase = await getSupabaseClient(req);
+  } catch (err) {
+    return res.status(401).json({ error: err.message });
+  }
+
+  const { data, error } = await supabase
+    .from("Titles")
+    .select("*")
+    .eq("IMDbId", imdbId)
+    .single();
+
+  if (error || !data) {
+    return res.status(404).json({ error: "Title not found" });
+  }
+
+  res.status(200).json({ title: data });
+};
+
 module.exports = {
   addToList,
   getAllListTitles,
   removeFromList,
   getOrInsertTitleId,
+  searchTitleByImdbId,
 };
