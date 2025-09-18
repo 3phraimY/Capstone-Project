@@ -1,7 +1,7 @@
 import { getDatabaseTitleByImdbId } from '@/app/hooks/listTables'
 import { getOMDbTitleByImdbId } from '@/app/hooks/omdbAPI'
 import type { Title } from '@/app/hooks/listTables'
-import BackButton from './BackButton'
+import BackButton from '../../components/BackButton'
 import CheckAuth from '@/app/components/CheckAuth'
 
 export default function TitleDetailsPage({
@@ -12,7 +12,7 @@ export default function TitleDetailsPage({
   return (
     <CheckAuth>
       {async userId => {
-        const { titleId } = params
+        const { titleId } = await params
         let title: Title | null = await getDatabaseTitleByImdbId(titleId)
         if (!title) title = await getOMDbTitleByImdbId(titleId)
 

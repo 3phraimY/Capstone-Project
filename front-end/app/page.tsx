@@ -1,16 +1,20 @@
 import CheckAuth from './components/CheckAuth'
 import { getListTitles, ListType } from './hooks/listTables'
 import TitleCarousel from './components/TitleCarousel'
-import { getPreviousRecommendations } from './hooks/previousRecommendations'
+import Link from 'next/link'
 
 export default function Home() {
   return (
     <CheckAuth>
       {async userId => {
-        const SavedList = await getListTitles(ListType.Saved, userId)
-        const SeenList = await getListTitles(ListType.Seen, userId)
-        const ExclusionList = await getListTitles(ListType.Exclusion, userId)
-        const previousRecs = await getPreviousRecommendations(userId)
+        const [SavedList, SeenList, ExclusionList, PreviousList] =
+          await Promise.all([
+            getListTitles(ListType.Saved, userId),
+            getListTitles(ListType.Seen, userId),
+            getListTitles(ListType.Exclusion, userId),
+            getListTitles(ListType.Previous, userId)
+          ])
+
         return (
           <div className='flex w-full flex-col items-center'>
             <div className='my-4 w-full text-center text-2xl font-bold'>
@@ -18,22 +22,42 @@ export default function Home() {
             </div>
 
             <div className='mt-4 mb-0 ml-4 self-start text-lg font-semibold'>
-              Previous Recommendations
+              <Link
+                href={`/myLists/${ListType.Previous}`}
+                className='hover:underline'
+              >
+                Previous Recommendations &gt;
+              </Link>
             </div>
-            <TitleCarousel titles={previousRecs.map(r => r.Title)} />
+            <TitleCarousel titles={PreviousList} />
 
             <div className='mt-4 mb-0 ml-4 self-start text-lg font-semibold'>
-              Saved List
+              <Link
+                href={`/myLists/${ListType.Saved}`}
+                className='hover:underline'
+              >
+                Saved List &gt;
+              </Link>
             </div>
             <TitleCarousel titles={SavedList} />
 
             <div className='mt-4 mb-0 ml-4 self-start text-lg font-semibold'>
-              Seen List
+              <Link
+                href={`/myLists/${ListType.Seen}`}
+                className='hover:underline'
+              >
+                Seen List &gt;
+              </Link>
             </div>
             <TitleCarousel titles={SeenList} />
 
             <div className='mt-4 mb-0 ml-4 self-start text-lg font-semibold'>
-              Exclusion List
+              <Link
+                href={`/myLists/${ListType.Exclusion}`}
+                className='hover:underline'
+              >
+                Exclusion List &gt;
+              </Link>
             </div>
             <TitleCarousel titles={ExclusionList} />
           </div>

@@ -4,6 +4,7 @@ const validLists = {
   exclusion: "ExlusionList",
   saved: "SavedRecommendations",
   seen: "SeenMovies",
+  previous: "PreviousRecommendations",
 };
 
 async function getOrInsertTitleId(supabase, imdbId, titleData = {}) {
@@ -92,13 +93,39 @@ const addToList = async (req, res) => {
     }
   }
 
+  // Enforce max limit for "previous"
+  if (listType === "previous") {
+    // Count current recommendations for this user
+    const { data: existing, error: countError } = await supabase
+      .from("PreviousRecommendations")
+      .select("PreviousRecommendationItemId, RecommendedDate")
+      .eq("UserId", userId)
+      .order("RecommendedDate", { ascending: true });
+
+    if (countError) return res.status(400).json({ error: countError.message });
+
+    // If at limit, delete the oldest
+    if (existing && existing.length >= PREVIOUS_RECOMMENDED_CACHED) {
+      const oldest = existing[0];
+      const { error: deleteError } = await supabase
+        .from("PreviousRecommendations")
+        .delete()
+        .eq(
+          "PreviousRecommendationItemId",
+          oldest.PreviousRecommendationItemId
+        );
+      if (deleteError)
+        return res.status(400).json({ error: deleteError.message });
+    }
+  }
+
   const { data, error } = await supabase
     .from(tableName)
     .insert([{ UserId: userId, TitleId: resolvedTitleId, ...rest }])
     .select();
 
   if (error) return res.status(400).json({ error: error.message });
-  res.status(201).json({ item: data[0] });
+  res.status(201).json({ success: true });
 };
 
 const getAllListTitles = async (req, res) => {
@@ -120,15 +147,36 @@ const getAllListTitles = async (req, res) => {
     return res.status(401).json({ error: err.message });
   }
 
-  // Join the list with Titles
-  const { data, error } = await supabase
-    .from(tableName)
-    .select("TitleId, Titles(*)")
-    .eq("UserId", userId);
+  let data, error;
+  if (listType === "previous") {
+    // Join PreviousRecommendations with Titles, include extra fields
+    ({ data, error } = await supabase
+      .from("PreviousRecommendations")
+      .select("PreviousRecommendationItemId, RecommendedDate, Titles(*)")
+      .eq("UserId", userId)
+      .order("RecommendedDate", { ascending: false }));
+  } else {
+    // Join the list with Titles
+    ({ data, error } = await supabase
+      .from(tableName)
+      .select("TitleId, Titles(*)")
+      .eq("UserId", userId));
+  }
 
   if (error) return res.status(400).json({ error: error.message });
 
-  const titles = data.map((item) => item.Titles);
+  let titles;
+  if (listType === "previous") {
+    titles = data.map((item) => ({
+      TitleId: item.Titles.TitleId,
+      ...item.Titles,
+    }));
+  } else {
+    titles = data.map((item) => ({
+      TitleId: item.TitleId,
+      ...item.Titles,
+    }));
+  }
 
   res.status(200).json({ titles });
 };
@@ -154,11 +202,23 @@ const removeFromList = async (req, res) => {
     return res.status(401).json({ error: err.message });
   }
 
-  const { error } = await supabase
-    .from(tableName)
-    .delete()
-    .eq("UserId", userId)
-    .eq("TitleId", titleId);
+  let deleteQuery = supabase.from(tableName).delete().eq("UserId", userId);
+
+  if (listType === "previous") {
+    // Remove by PreviousRecommendationItemId if provided, else by TitleId
+    if (req.body.PreviousRecommendationItemId) {
+      deleteQuery = deleteQuery.eq(
+        "PreviousRecommendationItemId",
+        req.body.PreviousRecommendationItemId
+      );
+    } else {
+      deleteQuery = deleteQuery.eq("TitleId", titleId);
+    }
+  } else {
+    deleteQuery = deleteQuery.eq("TitleId", titleId);
+  }
+
+  const { error } = await deleteQuery;
 
   if (error) return res.status(400).json({ error: error.message });
   res.status(200).json({ message: "Item removed from list" });
@@ -190,6 +250,10 @@ const searchTitleByImdbId = async (req, res) => {
 
   res.status(200).json({ title: data });
 };
+
+const PREVIOUS_RECOMMENDED_CACHED = parseInt(
+  process.env.PREVIOUS_RECOMMENDED_CACHED
+);
 
 module.exports = {
   addToList,

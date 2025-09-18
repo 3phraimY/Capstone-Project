@@ -23,9 +23,6 @@ app.use("/api/user", UserRoutes);
 const ListTableRoutes = require("./routes/listTables.js");
 app.use("/api/list", ListTableRoutes);
 
-const PreviousRecommendationsRoutes = require("./routes/previousRecommendations.js");
-app.use("/api/previousRecommendations", PreviousRecommendationsRoutes);
-
 const OMDbRoutes = require("./routes/omdbAPI.js");
 app.use("/api/omdb", OMDbRoutes);
 

@@ -5,7 +5,8 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL
 export enum ListType {
   Exclusion = 'exclusion',
   Saved = 'saved',
-  Seen = 'seen'
+  Seen = 'seen',
+  Previous = 'previous'
 }
 
 export interface Title {
