@@ -1,6 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import type { Title } from '../hooks/listTables'
+import ClientPosterImage from './ClientPosterImage'
 
 export default function TitlePoster({ title }: { title: Title }) {
   const router = useRouter()
@@ -12,7 +13,7 @@ export default function TitlePoster({ title }: { title: Title }) {
       aria-label={`View details for ${title.Title}`}
       type='button'
     >
-      <img
+      <ClientPosterImage
         src={title.PosterURL}
         alt={title.Title}
         className='rounded-box w-full shadow'
