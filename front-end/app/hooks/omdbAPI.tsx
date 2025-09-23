@@ -1,4 +1,4 @@
-import type { Title } from './listTables'
+import type { Title } from './listTablesTypes'
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL
 

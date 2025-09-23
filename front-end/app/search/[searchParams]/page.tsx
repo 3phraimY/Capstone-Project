@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { searchOMDb, OMDbSearchResult } from '../../hooks/omdbAPI'
 import TitlePoster from '../../components/TitlePoster'
-import type { Title } from '../../hooks/listTables'
+import type { Title } from '../../hooks/listTablesTypes'
 
 export default function SearchPage() {
   const router = useRouter()

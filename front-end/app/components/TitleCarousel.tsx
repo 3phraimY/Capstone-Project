@@ -1,4 +1,4 @@
-import type { Title } from '../hooks/listTables'
+import type { Title } from '../hooks/listTablesTypes'
 import TitlePoster from './TitlePoster'
 
 export default function TitleCarousel({ titles }: { titles: Title[] }) {

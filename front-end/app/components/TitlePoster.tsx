@@ -1,6 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import type { Title } from '../hooks/listTables'
+import type { Title } from '../hooks/listTablesTypes'
 import ClientPosterImage from './ClientPosterImage'
 
 export default function TitlePoster({ title }: { title: Title }) {

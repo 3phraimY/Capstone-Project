@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 type Props = {
   src: string
@@ -8,11 +8,17 @@ type Props = {
   className?: string
 }
 
+const fallbackSrc =
+  'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930'
+
 export default function ClientPosterImage({ src, alt, className }: Props) {
   const [imgError, setImgError] = useState(false)
 
-  const fallbackSrc =
-    'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930'
+  useEffect(() => {
+    if (src === fallbackSrc) {
+      setImgError(true)
+    }
+  }, [src])
 
   return (
     <div className={`relative ${className}`}>

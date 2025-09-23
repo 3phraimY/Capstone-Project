@@ -1,5 +1,6 @@
 import requireUserId from './components/CheckAuth'
-import { getListTitles, ListType } from './hooks/listTables'
+import { getListTitles } from './hooks/listTablesServer'
+import { ListType } from './hooks/listTablesTypes'
 import TitleCarousel from './components/TitleCarousel'
 import Link from 'next/link'
 
@@ -14,9 +15,11 @@ export default async function Home() {
 
   return (
     <div className='flex w-full flex-col items-center'>
-      <div className='my-4 w-full text-center text-2xl font-bold'>Home</div>
+      <div className='my-4 w-full pt-4 text-center text-2xl font-bold'>
+        Home
+      </div>
 
-      <div className='mt-4 mb-0 ml-4 self-start text-lg font-semibold'>
+      <div className='mt-2 mb-0 ml-4 self-start text-lg font-semibold'>
         <Link
           href={`/myLists/${ListType.Previous}`}
           className='hover:underline'
