@@ -1,24 +1,44 @@
 'use client'
 
-import { useState } from 'react'
-import { searchOMDb, OMDbSearchResult } from '../hooks/omdbAPI'
-import TitlePoster from '../components/TitlePoster'
-import type { Title } from '../hooks/listTables'
+import { useState, useEffect } from 'react'
+import { useRouter, useParams } from 'next/navigation'
+import { searchOMDb, OMDbSearchResult } from '../../hooks/omdbAPI'
+import TitlePoster from '../../components/TitlePoster'
+import type { Title } from '../../hooks/listTables'
 
 export default function SearchPage() {
-  const [query, setQuery] = useState('')
+  const router = useRouter()
+  const params = useParams()
+  const initialQuery =
+    typeof params.searchParams === 'string' && params.searchParams !== '-'
+      ? decodeURIComponent(params.searchParams)
+      : ''
+
+  const [query, setQuery] = useState(initialQuery)
   const [results, setResults] = useState<OMDbSearchResult[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [searched, setSearched] = useState(false)
 
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault()
+  useEffect(() => {
+    if (initialQuery) {
+      handleSearch(initialQuery)
+    } else {
+      setResults([])
+      setSearched(false)
+      setError(null)
+    }
+  }, [initialQuery])
+
+  const handleSearch = async (searchTerm: string) => {
+    if (!searchTerm.trim()) {
+      return
+    }
     setLoading(true)
     setError(null)
     setSearched(false)
     try {
-      const data = await searchOMDb(query)
+      const data = await searchOMDb(searchTerm)
       if (data && data.Response === 'True') {
         setResults(data.Search)
       } else {
@@ -34,7 +54,13 @@ export default function SearchPage() {
     }
   }
 
-  // Map OMDbSearchResult to Title type for TitlePoster
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    router.replace(
+      `/search/${query.trim() ? encodeURIComponent(query.trim()) : '-'}`
+    )
+  }
+
   const toTitle = (result: OMDbSearchResult): Title => ({
     TitleId: result.imdbID,
     Title: result.Title,
@@ -56,8 +82,8 @@ export default function SearchPage() {
 
   return (
     <div className='mx-auto max-w-2xl p-8'>
-      <h1 className='mb-6 text-2xl font-bold'>Search OMDb Titles</h1>
-      <form className='mb-6 flex gap-2' onSubmit={handleSearch}>
+      <h1 className='mb-6 text-center text-2xl font-bold'>Search</h1>
+      <form className='mb-6 flex gap-2' onSubmit={onSubmit}>
         <input
           className='input input-bordered w-full'
           type='text'

@@ -1,4 +1,5 @@
 import './globals.css'
+import BottomNavBar from './components/BottomNavBar'
 
 export default function RootLayout({
   children
@@ -7,7 +8,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body>{children}</body>
+      <body>
+        <div className='min-h-screen pb-16'>{children}</div>
+        <BottomNavBar />
+      </body>
     </html>
   )
 }
