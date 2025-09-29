@@ -1,7 +1,7 @@
 const { getSupabaseClient } = require("../config/supabaseClient");
 
 const validLists = {
-  exclusion: "ExlusionList",
+  exclusion: "ExclusionList",
   saved: "SavedRecommendations",
   seen: "SeenMovies",
   previous: "PreviousRecommendations",
@@ -256,6 +256,7 @@ const PREVIOUS_RECOMMENDED_CACHED = parseInt(
 );
 
 module.exports = {
+  validLists,
   addToList,
   getAllListTitles,
   removeFromList,
