@@ -16,6 +16,7 @@ const loginUser = async (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "none",
+    domain: ".onrender.com",
     maxAge: 60 * 60 * 1000, // 1 hour
     overwrite: true,
   });
@@ -23,6 +24,7 @@ const loginUser = async (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "none",
+    domain: ".onrender.com",
     maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
     overwrite: true,
   });
@@ -79,6 +81,7 @@ const refreshAccessToken = async (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "none",
+    domain: ".onrender.com",
     maxAge: 60 * 60 * 1000, // 1 hour
     overwrite: true,
   });
@@ -86,6 +89,7 @@ const refreshAccessToken = async (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "none",
+    domain: ".onrender.com",
     maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
     overwrite: true,
   });
