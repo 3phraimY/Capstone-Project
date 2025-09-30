@@ -16,6 +16,7 @@ export async function checkAuth(): Promise<{
     credentials: 'include'
   })
   const data = await res.json()
+  console.log(data)
   return {
     authenticated: data.authenticated,
     user: data.user,

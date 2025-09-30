@@ -45,7 +45,7 @@ export default function SearchPage() {
         setResults([])
         setError(data?.Error || 'No results found')
       }
-    } catch (err: any) {
+    } catch {
       setError('Failed to fetch results')
       setResults([])
     } finally {

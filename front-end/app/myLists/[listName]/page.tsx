@@ -1,6 +1,6 @@
 import requireUserId from '@/app/components/CheckAuth'
 import { getListTitles } from '@/app/hooks/listTablesServer'
-import { ListType, Title } from '@/app/hooks/listTablesTypes'
+import { ListType } from '@/app/hooks/listTablesTypes'
 import TitlePoster from '@/app/components/TitlePoster'
 import BackButton from '../../components/BackButton'
 

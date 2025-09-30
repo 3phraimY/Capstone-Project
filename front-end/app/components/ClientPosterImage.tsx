@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 
 type Props = {
   src: string
@@ -22,7 +23,7 @@ export default function ClientPosterImage({ src, alt, className }: Props) {
 
   return (
     <div className={`relative ${className}`}>
-      <img
+      <Image
         src={imgError ? fallbackSrc : src}
         alt={alt}
         referrerPolicy='no-referrer'
