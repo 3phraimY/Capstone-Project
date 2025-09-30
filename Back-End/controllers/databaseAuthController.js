@@ -15,13 +15,13 @@ const loginUser = async (req, res) => {
   res.cookie("access_token", data.session.access_token, {
     httpOnly: true,
     secure: true,
-    sameSite: "lax",
+    sameSite: "none",
     maxAge: 60 * 60 * 1000, // 1 hour
   });
   res.cookie("refresh_token", data.session.refresh_token, {
     httpOnly: true,
     secure: true,
-    sameSite: "lax",
+    sameSite: "none",
     maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
   });
 
@@ -76,13 +76,13 @@ const refreshAccessToken = async (req, res) => {
   res.cookie("access_token", data.session.access_token, {
     httpOnly: true,
     secure: true,
-    sameSite: "lax",
+    sameSite: "none",
     maxAge: 60 * 60 * 1000, // 1 hour
   });
   res.cookie("refresh_token", data.session.refresh_token, {
     httpOnly: true,
     secure: true,
-    sameSite: "lax",
+    sameSite: "none",
     maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
   });
 
