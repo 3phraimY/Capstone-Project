@@ -17,12 +17,14 @@ const loginUser = async (req, res) => {
     secure: true,
     sameSite: "none",
     maxAge: 60 * 60 * 1000, // 1 hour
+    overwrite: true,
   });
   res.cookie("refresh_token", data.session.refresh_token, {
     httpOnly: true,
     secure: true,
     sameSite: "none",
     maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
+    overwrite: true,
   });
 
   res.json({
@@ -78,12 +80,14 @@ const refreshAccessToken = async (req, res) => {
     secure: true,
     sameSite: "none",
     maxAge: 60 * 60 * 1000, // 1 hour
+    overwrite: true,
   });
   res.cookie("refresh_token", data.session.refresh_token, {
     httpOnly: true,
     secure: true,
     sameSite: "none",
     maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
+    overwrite: true,
   });
 
   res.json({
@@ -92,6 +96,8 @@ const refreshAccessToken = async (req, res) => {
 };
 
 const checkAuthentication = async (req, res) => {
+  console.log("Cookies received in checkAuthentication:", req.cookies);
+
   const hasRefreshToken = !!(req.cookies && req.cookies.refresh_token);
   try {
     const supabase = await getSupabaseClient(req);
