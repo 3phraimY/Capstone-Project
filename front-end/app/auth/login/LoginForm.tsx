@@ -16,7 +16,7 @@ export default function LoginForm() {
     const result = await login(email, password)
     if (result && !result.error) {
       setSuccess(true)
-      router.push('/')
+      window.location.href = '/'
     }
   }
 

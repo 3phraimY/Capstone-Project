@@ -17,7 +17,7 @@ export default function SignupForm() {
     const result = await signUp(email, password, Username)
     if (result && !result.error) {
       setSuccess(true)
-      router.push('/')
+      window.location.href = '/'
     }
   }
 
