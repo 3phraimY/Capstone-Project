@@ -11,6 +11,8 @@ const loginUser = async (req, res) => {
 
   if (error) return res.status(401).json({ error: error.message });
 
+  console.log("All access tokens:", data);
+
   // HTTP-only cookies
   res.cookie("access_token", data.session.access_token, {
     httpOnly: true,
