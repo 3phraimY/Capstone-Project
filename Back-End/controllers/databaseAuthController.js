@@ -16,7 +16,7 @@ const loginUser = async (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "none",
-    domain: process.env.BACKEND_URL,
+    domain: process.env.FRONT_URL.replace(/^https?:\/\//, ""),
     maxAge: 60 * 60 * 1000, // 1 hour
     overwrite: true,
   });
@@ -24,7 +24,7 @@ const loginUser = async (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "none",
-    domain: process.env.BACKEND_URL,
+    domain: process.env.FRONT_URL.replace(/^https?:\/\//, ""),
     maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
     overwrite: true,
   });
@@ -62,6 +62,25 @@ const signUp = async (req, res) => {
     console.error("Error inserting user:", err.message);
   }
 
+  if (data.session) {
+    res.cookie("access_token", data.session.access_token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      domain: process.env.FRONT_URL.replace(/^https?:\/\//, ""),
+      maxAge: 60 * 60 * 1000, // 1 hour
+      overwrite: true,
+    });
+    res.cookie("refresh_token", data.session.refresh_token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      domain: process.env.FRONT_URL.replace(/^https?:\/\//, ""),
+      maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
+      overwrite: true,
+    });
+  }
+
   res.status(200).json({ user: data.user.id });
 };
 
@@ -81,7 +100,7 @@ const refreshAccessToken = async (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "none",
-    domain: ".onrender.com",
+    domain: process.env.FRONT_URL.replace(/^https?:\/\//, ""),
     maxAge: 60 * 60 * 1000, // 1 hour
     overwrite: true,
   });
@@ -89,7 +108,7 @@ const refreshAccessToken = async (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "none",
-    domain: ".onrender.com",
+    domain: process.env.FRONT_URL.replace(/^https?:\/\//, ""),
     maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
     overwrite: true,
   });

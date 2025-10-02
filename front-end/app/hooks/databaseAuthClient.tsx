@@ -1,7 +1,5 @@
 import { useState } from 'react'
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL
-
 interface AuthResponse {
   user?: string
   error?: string
@@ -29,7 +27,7 @@ export function useDatabaseAuth(): UseDatabaseAuthResult {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch(`${BACKEND_URL}/api/auth/login`, {
+      const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -57,7 +55,7 @@ export function useDatabaseAuth(): UseDatabaseAuthResult {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch(`${BACKEND_URL}/api/auth/signUp`, {
+      const res = await fetch('/api/auth/signUp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, full_name }),
