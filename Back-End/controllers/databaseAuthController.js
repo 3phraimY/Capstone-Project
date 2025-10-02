@@ -11,14 +11,12 @@ const loginUser = async (req, res) => {
 
   if (error) return res.status(401).json({ error: error.message });
 
-  console.log("All access tokens:", data);
-
   // HTTP-only cookies
   res.cookie("access_token", data.session.access_token, {
     httpOnly: true,
     secure: true,
     sameSite: "none",
-    domain: ".onrender.com",
+    domain: process.env.BACKEND_URL,
     maxAge: 60 * 60 * 1000, // 1 hour
     overwrite: true,
   });
@@ -26,7 +24,7 @@ const loginUser = async (req, res) => {
     httpOnly: true,
     secure: true,
     sameSite: "none",
-    domain: ".onrender.com",
+    domain: process.env.BACKEND_URL,
     maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
     overwrite: true,
   });
