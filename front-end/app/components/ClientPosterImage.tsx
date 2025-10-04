@@ -23,7 +23,7 @@ export default function ClientPosterImage({ src, alt, className }: Props) {
 
   return (
     <div className={`relative ${className}`}>
-      <Image
+      <img
         src={imgError ? fallbackSrc : src}
         alt={alt}
         referrerPolicy='no-referrer'
