@@ -6,7 +6,7 @@ export async function getOMDbTitleByImdbId(
   imdbId: string
 ): Promise<Title | null> {
   const res = await fetch(
-    `${BACKEND_URL}/api/omdb/findTitle?id=${encodeURIComponent(imdbId)}`,
+    `/api/omdb/findTitle?id=${encodeURIComponent(imdbId)}`,
     {
       method: 'GET',
       cache: 'force-cache'
@@ -55,13 +55,10 @@ export async function searchOMDb(
   page: number = 1
 ): Promise<OMDbSearchResponse | null> {
   const params = new URLSearchParams({ title, page: page.toString() })
-  const res = await fetch(
-    `${BACKEND_URL}/api/omdb/searchResults?${params.toString()}`,
-    {
-      method: 'GET',
-      cache: 'no-store'
-    }
-  )
+  const res = await fetch(`/api/omdb/searchResults?${params.toString()}`, {
+    method: 'GET',
+    cache: 'no-store'
+  })
   if (!res.ok) return null
   return res.json()
 }

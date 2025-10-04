@@ -1,8 +1,6 @@
 import { cookies } from 'next/headers'
 import { Title, ListType } from './listTablesTypes'
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL
-
 export async function getListTitles(
   listType: ListType,
   userId: string
@@ -11,7 +9,7 @@ export async function getListTitles(
   const cookieHeader = cookieStore.toString()
   const params = new URLSearchParams({ listType, userId })
   const res = await fetch(
-    `${BACKEND_URL}/api/list/getListTitles?${params.toString()}`,
+    `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/list/getListTitles?${params.toString()}`,
     {
       method: 'GET',
       headers: {
@@ -35,7 +33,7 @@ export async function getDatabaseTitleByImdbId(
   const cookieStore = await cookies()
   const cookieHeader = cookieStore.toString()
   const res = await fetch(
-    `${BACKEND_URL}/api/list/findTitleByImdbId?imdbId=${encodeURIComponent(imdbId)}`,
+    `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/list/findTitleByImdbId?imdbId=${encodeURIComponent(imdbId)}`,
     {
       method: 'GET',
       headers: { cookie: cookieHeader },

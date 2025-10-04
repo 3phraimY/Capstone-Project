@@ -23,30 +23,27 @@ export async function addToList(
     if (!valid) posterUrl = FALLBACK_POSTER
   }
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/list/addToList`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({
-        listType,
-        userId,
-        Title: title.Title,
-        Year: String(title.ReleaseYear),
-        Rated: title.Rating,
-        Runtime: title.Runtime,
-        Director: title.Director,
-        Writer: title.Writer,
-        Actors: title.Actors,
-        Plot: title.Plot,
-        Poster: posterUrl,
-        Metascore: String(title.MetaScore),
-        imdbID: title.IMDbId,
-        Type: title.Type
-      })
-    }
-  )
+  const res = await fetch('/api/list/addToList', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({
+      listType,
+      userId,
+      Title: title.Title,
+      Year: String(title.ReleaseYear),
+      Rated: title.Rating,
+      Runtime: title.Runtime,
+      Director: title.Director,
+      Writer: title.Writer,
+      Actors: title.Actors,
+      Plot: title.Plot,
+      Poster: posterUrl,
+      Metascore: String(title.MetaScore),
+      imdbID: title.IMDbId,
+      Type: title.Type
+    })
+  })
   if (!res.ok) {
     const data = await res.json().catch(() => ({}))
     throw new Error(data.error || 'Failed to add to list')
@@ -59,15 +56,12 @@ export async function removeFromList(
   titleId: string,
   listType: ListType
 ) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/list/removeFromList`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({ userId, titleId, listType })
-    }
-  )
+  const res = await fetch('/api/list/removeFromList', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ userId, titleId, listType })
+  })
   if (!res.ok) {
     const data = await res.json().catch(() => ({}))
     throw new Error(data.error || 'Failed to remove from list')
