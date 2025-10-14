@@ -29,5 +29,8 @@ app.use("/api/omdb", OMDbRoutes);
 const MCPRoutes = require("./routes/MCP.js");
 app.use("/api/mcp", MCPRoutes);
 
+const GeminiRoutes = require("./routes/geminiChat.js");
+app.use("/api/gemini", GeminiRoutes);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
