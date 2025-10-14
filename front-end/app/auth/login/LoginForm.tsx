@@ -1,14 +1,12 @@
 'use client'
 import { useState } from 'react'
 import { useDatabaseAuth } from '@/app/hooks/databaseAuthClient'
-import { useRouter } from 'next/navigation'
 
 export default function LoginForm() {
   const { login, loading, error } = useDatabaseAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [success, setSuccess] = useState(false)
-  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

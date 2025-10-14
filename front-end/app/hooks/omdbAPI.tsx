@@ -1,7 +1,5 @@
 import type { Title } from './listTablesTypes'
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL
-
 export async function getOMDbTitleByImdbId(
   imdbId: string
 ): Promise<Title | null> {

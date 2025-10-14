@@ -6,7 +6,6 @@ import { sendGeminiMessage, GeminiMessage } from '../hooks/geminiChat'
 export default function DiscoverPageClient({ userId }: { userId?: string }) {
   const [search, setSearch] = useState('')
   const [chatHistory, setChatHistory] = useState<GeminiMessage[]>([])
-  const [response, setResponse] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const chatStartRef = useRef<HTMLDivElement>(null)
@@ -24,21 +23,20 @@ export default function DiscoverPageClient({ userId }: { userId?: string }) {
     setLoading(true)
     setError(null)
 
-    const newHistory = [
+    const newHistory: GeminiMessage[] = [
       ...chatHistory,
       { role: 'user', parts: [{ text: search }] }
     ]
 
     try {
-      const res = await sendGeminiMessage(search, chatHistory)
-      setResponse(res.response)
+      const res = await sendGeminiMessage(search, newHistory)
       setChatHistory([
         ...newHistory,
         { role: 'model', parts: [{ text: res.response }] }
       ])
       setSearch('')
     } catch (err) {
-      setError('Failed to get response.')
+      setError(`Failed to get response: ${err}`)
     } finally {
       setLoading(false)
     }
