@@ -32,23 +32,31 @@ async function getUserLists(req, res) {
     ]);
 
     const savedList = saved.data
-      ? saved.data.map((item) => ({ TitleId: item.TitleId, ...item.Titles }))
+      ? saved.data.map((item) => ({
+          IMDbId: item.Titles?.IMDbId,
+          Title: item.Titles?.Title,
+          ReleaseYear: item.Titles?.ReleaseYear,
+        }))
       : [];
     const seenList = seen.data
-      ? seen.data.map((item) => ({ TitleId: item.TitleId, ...item.Titles }))
+      ? seen.data.map((item) => ({
+          IMDbId: item.Titles?.IMDbId,
+          Title: item.Titles?.Title,
+          ReleaseYear: item.Titles?.ReleaseYear,
+        }))
       : [];
     const exclusionList = exclusion.data
       ? exclusion.data.map((item) => ({
-          TitleId: item.TitleId,
-          ...item.Titles,
+          IMDbId: item.Titles?.IMDbId,
+          Title: item.Titles?.Title,
+          ReleaseYear: item.Titles?.ReleaseYear,
         }))
       : [];
     const previousList = previous.data
       ? previous.data.map((item) => ({
-          TitleId: item.Titles.TitleId,
-          ...item.Titles,
-          PreviousRecommendationItemId: item.PreviousRecommendationItemId,
-          RecommendedDate: item.RecommendedDate,
+          IMDbId: item.Titles?.IMDbId,
+          Title: item.Titles?.Title,
+          ReleaseYear: item.Titles?.ReleaseYear,
         }))
       : [];
 
