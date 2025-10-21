@@ -1,11 +1,18 @@
 from fastmcp import FastMCP
+from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
 import requests
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
-mcp = FastMCP("My MCP Server")
+verifier = StaticTokenVerifier(
+    tokens={
+        os.getenv("CLIENT_BEARER_TOKEN"): {}
+    }
+)
+
+mcp = FastMCP("My MCP Server", auth=verifier)
 
 @mcp.tool
 def greet(name: str) -> str:
