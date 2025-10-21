@@ -142,3 +142,8 @@ vite.config.ts.timestamp-*
 MCP-Server/venv/
 MCP-Server/__pycache__/
 MCP-Server/.gemini/
+
+# MCP-Client specific
+MCP-Client/venv/
+MCP-Client/__pycache__/
+MCP-Client/.gemini/
