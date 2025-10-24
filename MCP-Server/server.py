@@ -1,19 +1,21 @@
 from fastmcp import FastMCP
-from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
+from fastmcp.server.auth.providers.jwt import JWTVerifier
 import requests
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
-verifier = StaticTokenVerifier(
-    tokens={
-        os.getenv("CLIENT_BEARER_TOKEN"): {}
-    }
+SHARED_SECRET = os.getenv("CLIENT_BEARER_TOKEN") 
+
+verifier = JWTVerifier(
+    public_key=SHARED_SECRET, 
+    algorithm="HS256", 
+    issuer="mcp-server",
+    audience="capstone-project",
 )
 
-#mcp = FastMCP("My MCP Server", auth=verifier)
-mcp = FastMCP("My MCP Server")
+mcp = FastMCP("My MCP Server", auth=verifier)
 
 @mcp.tool
 def greet(name: str) -> str:
