@@ -12,7 +12,8 @@ verifier = StaticTokenVerifier(
     }
 )
 
-mcp = FastMCP("My MCP Server", auth=verifier)
+#mcp = FastMCP("My MCP Server", auth=verifier)
+mcp = FastMCP("My MCP Server")
 
 @mcp.tool
 def greet(name: str) -> str:
