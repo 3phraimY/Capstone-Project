@@ -13,7 +13,7 @@ from datetime import datetime, timedelta, timezone
 load_dotenv()
 
 MCP_SERVER_URL = os.getenv("MCP_SERVER_URL")
-GEMINI_API_KEY = os.getenv("GENAI_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 SHARED_SECRET = os.getenv("CLIENT_BEARER_TOKEN")
 
 def generate_auth_token():
