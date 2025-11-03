@@ -1,9 +1,9 @@
 'use client'
 import { useRef, useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { sendGeminiMessage, GeminiMessage } from '../hooks/geminiChat'
+import { sendGeminiMCP, GeminiMessage } from '../hooks/geminiChat'
 
-export default function DiscoverPageClient({ userId }: { userId?: string }) {
+export default function DiscoverPageClient({ userId }: { userId: string }) {
   const [search, setSearch] = useState('')
   const [chatHistory, setChatHistory] = useState<GeminiMessage[]>([])
   const [loading, setLoading] = useState(false)
@@ -29,10 +29,10 @@ export default function DiscoverPageClient({ userId }: { userId?: string }) {
     ]
 
     try {
-      const res = await sendGeminiMessage(search, newHistory)
+      const res = await sendGeminiMCP(search, userId, newHistory)
       setChatHistory([
         ...newHistory,
-        { role: 'model', parts: [{ text: res.response }] }
+        { role: 'model', parts: [{ text: res.result }] }
       ])
       setSearch('')
     } catch (err) {
