@@ -32,7 +32,7 @@ def generate_auth_token():
     )
     return token
 
-async def generate_message_with_mcp(message: str, history=None):
+async def generate_message_with_mcp(message: str, system_instructions: str, history=None):
     client_jwt_token = generate_auth_token()
     mcp_client = Client(MCP_SERVER_URL, auth=client_jwt_token)    
     await mcp_client._connect() 
@@ -46,9 +46,11 @@ async def generate_message_with_mcp(message: str, history=None):
         model="gemini-2.0-flash",
         contents=conversation_history,
         config=types.GenerateContentConfig(
-            temperature=0,
+            temperature=0.1,
+            top_p=0.8,
             tools=[mcp_client.session], 
-        ),
+            system_instruction=system_instructions
+            ),
     )
     await mcp_client._disconnect()
     return response.text
@@ -59,7 +61,6 @@ security = HTTPBearer()
 EXPECTED_TOKEN = os.getenv("MCP_CLIENT_ENDPOINT_BEARER_TOKEN")  # Set this in your .env
 
 def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    print("Verifying token:", credentials)
     if credentials.scheme.lower() != "bearer" or credentials.credentials != EXPECTED_TOKEN:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -74,10 +75,29 @@ async def gemini_endpoint(
     data = await request.json()
     message = data.get("contentMessage")
     history = data.get("history")
+    user_id = data.get("userId")
+
+    system_instructions = "\n".join([
+    "You are an AI assistant that is able to conversationally suggest tv shows and movies based on user preferences.",
+    "Always use the getUserLists tool to retrieve the user's lists before making any recommendations.",
+
+    #send userId to system instructions
+    f"This user's userId is {user_id}, which you can use to look up their preferences using the getUserLists tool.",
+    
+    #explanation of lists/recommendation guidelines
+    "From these results, the saved list are those that the user wants to watched, but hasn't yet seen, the seen list are movies that the user has watched before, the exclusion list are titles that the user does not want to appear in future recommendations, and the previous recommendations list are titles that you have recommended to the user in the past.",
+    "When making recommendations, avoid suggesting titles that appear in the user's seen, saved, exclusion, or previous recommendations list.",
+    "When giving a recommendation, provide a brief explanation of why you think the user would enjoy that title based on their preferences.",
+    
+    #output format instructions
+    "The final output containing recommendations **MUST** be a valid JSON array, and it **MUST** follow this exact structure for every recommendation: "
+    "```json [{\"title\": \"<title>\", \"year\": \"<year>\", \"reason\": \"<reason>\"}] ```",
+    "Do not include any text, headers, or explanations outside of the final JSON array. Only output the JSON block.",
+    ])
     if not message:
         return JSONResponse({"error": "Missing contentMessage"}, status_code=400)
     try:
-        result = await generate_message_with_mcp(message, history)
+        result = await generate_message_with_mcp(message, system_instructions, history)
         return {"result": result}
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=500)
