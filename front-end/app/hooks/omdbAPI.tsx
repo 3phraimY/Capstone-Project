@@ -4,7 +4,7 @@ export async function getOMDbTitleByImdbId(
   imdbId: string
 ): Promise<Title | null> {
   const res = await fetch(
-    `/api/omdb/findTitle?id=${encodeURIComponent(imdbId)}`,
+    `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/omdb/findTitle?id=${encodeURIComponent(imdbId)}`,
     {
       method: 'GET',
       cache: 'force-cache'

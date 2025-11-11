@@ -91,7 +91,7 @@ async def gemini_endpoint(
     
     #output format instructions
     "The final output containing recommendations **MUST** be a valid JSON array, and it **MUST** follow this exact structure for every recommendation: "
-    "```json [{\"title\": \"<title>\", \"year\": \"<year>\", \"reason\": \"<reason>\"}] ```",
+    "```json [{\"title\": \"<title>\", \"year\": \"<year>\", \"imbdId\": \"<imbdId>\", \"reason\": \"<reason>\"}] ```",
     "Do not include any text, headers, or explanations outside of the final JSON array. Only output the JSON block.",
     ])
     if not message:

@@ -10,7 +10,15 @@ export type GeminiChatResponse = {
 
 export type GeminiMCPResponse = {
   result: string
+  recommendations: GeminiRecommendation[]
   error?: string
+}
+
+export type GeminiRecommendation = {
+  title: string
+  year: string
+  imbdId: string
+  reason: string
 }
 
 export async function sendGeminiMessage(
@@ -26,7 +34,7 @@ export async function sendGeminiMessage(
   return res.json()
 }
 
-export async function sendGeminiMCP(
+export async function getGeminiRecommendations(
   contentMessage: string,
   userId: string,
   history?: GeminiMessage[]
@@ -42,5 +50,17 @@ export async function sendGeminiMCP(
     credentials: 'include',
     body: JSON.stringify(body)
   })
-  return res.json()
+  const mcpResponse: GeminiMCPResponse = await res.json()
+  mcpResponse.recommendations = parseGeminiJsonBlock(mcpResponse.result) ?? []
+  return mcpResponse
+}
+
+function parseGeminiJsonBlock(result: string): GeminiRecommendation[] | null {
+  const match = result.match(/```json\s*([\s\S]+?)\s*```/)
+  if (!match) return null
+  try {
+    return JSON.parse(match[1]) as GeminiRecommendation[]
+  } catch {
+    return null
+  }
 }

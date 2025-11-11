@@ -1,11 +1,21 @@
 'use client'
 import { useRef, useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { sendGeminiMCP, GeminiMessage } from '../hooks/geminiChat'
+import {
+  getGeminiRecommendations,
+  GeminiMCPResponse,
+  GeminiRecommendation,
+  GeminiMessage
+} from '../hooks/geminiChat'
+
+export type GeminiChatEntry = {
+  message: GeminiMessage
+  recommendations: GeminiRecommendation[] | null
+}
 
 export default function DiscoverPageClient({ userId }: { userId: string }) {
   const [search, setSearch] = useState('')
-  const [chatHistory, setChatHistory] = useState<GeminiMessage[]>([])
+  const [chatEntries, setChatEntries] = useState<GeminiChatEntry[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const chatStartRef = useRef<HTMLDivElement>(null)
@@ -14,7 +24,7 @@ export default function DiscoverPageClient({ userId }: { userId: string }) {
     if (chatStartRef.current) {
       chatStartRef.current.scrollIntoView({ behavior: 'smooth' })
     }
-  }, [chatHistory])
+  }, [chatEntries])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -23,17 +33,24 @@ export default function DiscoverPageClient({ userId }: { userId: string }) {
     setLoading(true)
     setError(null)
 
-    const newHistory: GeminiMessage[] = [
-      ...chatHistory,
-      { role: 'user', parts: [{ text: search }] }
-    ]
+    // Add user entry
+    const userEntry: GeminiChatEntry = {
+      message: { role: 'user', parts: [{ text: search }] },
+      recommendations: null
+    }
 
     try {
-      const res = await sendGeminiMCP(search, userId, newHistory)
-      setChatHistory([
-        ...newHistory,
-        { role: 'model', parts: [{ text: res.result }] }
-      ])
+      const res: GeminiMCPResponse = await getGeminiRecommendations(
+        search,
+        userId,
+        chatEntries.map(entry => entry.message).concat(userEntry.message)
+      )
+      // Add model entry with recommendations
+      const modelEntry: GeminiChatEntry = {
+        message: { role: 'model', parts: [{ text: res.result }] },
+        recommendations: res.recommendations
+      }
+      setChatEntries([...chatEntries, userEntry, modelEntry])
       setSearch('')
     } catch (err) {
       setError(`Failed to get response: ${err}`)
@@ -46,44 +63,37 @@ export default function DiscoverPageClient({ userId }: { userId: string }) {
     <div className='relative min-h-screen w-full pb-20'>
       <h1 className='mb-6 text-center text-2xl font-bold'>Discover</h1>
       <div className='mt-6 overflow-y-auto px-2 text-left'>
-        {chatHistory.length === 0 && (
+        {chatEntries.length === 0 && (
           <p className='text-lg text-gray-600'>
             Start your discovery journey! A chat response window will appear
             here soon.
           </p>
         )}
-        {chatHistory.map((msg, idx) => {
-          const isLatest = idx === chatHistory.length - 1
+        {chatEntries.map((entry, idx) => {
+          const isLatest = idx === chatEntries.length - 1
           return (
             <div
               key={idx}
               ref={isLatest ? chatStartRef : undefined}
               className={`mb-2 rounded p-2 ${
-                msg.role === 'user'
+                entry.message.role === 'user'
                   ? 'bg-blue-100 text-blue-900'
                   : 'bg-green-100 text-green-900'
               }`}
             >
-              <strong>{msg.role === 'user' ? 'You' : 'Gemini'}:</strong>{' '}
-              {msg.role === 'model' ? (
-                <ReactMarkdown
-                  components={{
-                    hr: ({ ...props }) => (
-                      <hr
-                        {...props}
-                        style={{
-                          border: 'none',
-                          borderTop: '2px solid #ccc',
-                          margin: '1.5em 0'
-                        }}
-                      />
-                    )
-                  }}
-                >
-                  {msg.parts[0].text}
+              <strong>
+                {entry.message.role === 'user' ? 'You' : 'Gemini'}:
+              </strong>{' '}
+              {entry.message.role === 'model' &&
+              entry.recommendations &&
+              entry.recommendations.length > 0 ? (
+                <ReactMarkdown>
+                  {entry.recommendations
+                    .map(rec => `**${rec.title}** (${rec.year})\n${rec.reason}`)
+                    .join('\n\n')}
                 </ReactMarkdown>
               ) : (
-                msg.parts[0].text
+                entry.message.parts[0].text
               )}
             </div>
           )
