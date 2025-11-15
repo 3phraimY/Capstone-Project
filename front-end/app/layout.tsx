@@ -1,5 +1,6 @@
 import './globals.css'
 import BottomNavBar from './components/BottomNavBar'
+import { ChatHistoryProvider } from './context/DiscoverContext'
 
 export default function RootLayout({
   children
@@ -9,8 +10,10 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
-        <div className='min-h-screen pb-16'>{children}</div>
-        <BottomNavBar />
+        <ChatHistoryProvider>
+          <div className='min-h-screen pb-16'>{children}</div>
+          <BottomNavBar />
+        </ChatHistoryProvider>
       </body>
     </html>
   )

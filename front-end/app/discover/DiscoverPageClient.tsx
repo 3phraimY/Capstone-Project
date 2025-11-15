@@ -7,6 +7,8 @@ import {
   GeminiRecommendation,
   GeminiMessage
 } from '../hooks/geminiChat'
+import TitlePoster from '../components/TitlePoster'
+import { useChatHistory } from '../context/DiscoverContext'
 
 export type GeminiChatEntry = {
   message: GeminiMessage
@@ -14,8 +16,8 @@ export type GeminiChatEntry = {
 }
 
 export default function DiscoverPageClient({ userId }: { userId: string }) {
+  const { chatEntries, setChatEntries } = useChatHistory()
   const [search, setSearch] = useState('')
-  const [chatEntries, setChatEntries] = useState<GeminiChatEntry[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const chatStartRef = useRef<HTMLDivElement>(null)
@@ -87,13 +89,25 @@ export default function DiscoverPageClient({ userId }: { userId: string }) {
               {entry.message.role === 'model' &&
               entry.recommendations &&
               entry.recommendations.length > 0 ? (
-                <ReactMarkdown>
-                  {entry.recommendations
-                    .map(rec => `**${rec.title}** (${rec.year})\n${rec.reason}`)
-                    .join('\n\n')}
-                </ReactMarkdown>
+                entry.recommendations.map(rec => (
+                  <div
+                    key={rec.imbdId}
+                    className='mb-4 flex flex-row items-start gap-4'
+                  >
+                    <div className='flex w-1/2 justify-center'>
+                      <TitlePoster title={rec.Title!} />
+                    </div>
+                    <div className='w-1/2'>
+                      <strong className='text-lg'>
+                        {rec.Title?.Title || rec.title}
+                      </strong>{' '}
+                      <span className='text-gray-500'>({rec.year})</span>
+                      <div className='mt-2 text-base'>{rec.reason}</div>
+                    </div>
+                  </div>
+                ))
               ) : (
-                entry.message.parts[0].text
+                <ReactMarkdown>{entry.message.parts[0].text}</ReactMarkdown>
               )}
             </div>
           )

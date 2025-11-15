@@ -1,3 +1,6 @@
+import { Title } from './listTablesTypes'
+import { getOMDbTitleByImdbId } from './omdbAPI'
+
 export type GeminiMessage = {
   role: 'user' | 'model'
   parts: { text: string }[]
@@ -18,6 +21,7 @@ export type GeminiRecommendation = {
   title: string
   year: string
   imbdId: string
+  Title: Title | null
   reason: string
 }
 
@@ -52,6 +56,14 @@ export async function getGeminiRecommendations(
   })
   const mcpResponse: GeminiMCPResponse = await res.json()
   mcpResponse.recommendations = parseGeminiJsonBlock(mcpResponse.result) ?? []
+
+  mcpResponse.recommendations = await Promise.all(
+    mcpResponse.recommendations.map(async rec => {
+      const omdbTitle = await getOMDbTitleByImdbId(rec.imbdId)
+      return { ...rec, Title: omdbTitle }
+    })
+  )
+
   return mcpResponse
 }
 
