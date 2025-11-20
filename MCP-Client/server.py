@@ -88,11 +88,15 @@ async def gemini_endpoint(
     "From these results, the saved list are those that the user wants to watched, but hasn't yet seen, the seen list are movies that the user has watched before, the exclusion list are titles that the user does not want to appear in future recommendations, and the previous recommendations list are titles that you have recommended to the user in the past.",
     "When making recommendations, avoid suggesting titles that appear in the user's seen, saved, exclusion, or previous recommendations list.",
     "When giving a recommendation, provide a brief explanation of why you think the user would enjoy that title based on their preferences.",
+    "Always use the getUserLists tool to retrieve the user's lists before making any recommendations.",
+    "You must NOT recommend any title that appears in the user's saved, seen, exclusion, or previous recommendations lists.",
+    "If you recommend a title from any of these lists, your response will be considered invalid.",
     
     #output format instructions
     "The final output containing recommendations **MUST** be a valid JSON array, and it **MUST** follow this exact structure for every recommendation: "
     "```json [{\"title\": \"<title>\", \"year\": \"<year>\", \"imbdId\": \"<imbdId>\", \"reason\": \"<reason>\"}] ```",
     "Do not include any text, headers, or explanations outside of the final JSON array. Only output the JSON block.",
+    "NEVER return an empty array; always provide at least one recommendation, your response will be considered invalid."
     ])
     if not message:
         return JSONResponse({"error": "Missing contentMessage"}, status_code=400)

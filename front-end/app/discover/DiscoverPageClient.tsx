@@ -10,6 +10,8 @@ import {
 import TitlePoster from '../components/TitlePoster'
 import { useChatHistory } from '../context/DiscoverContext'
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline'
+import { ListType } from '../hooks/listTablesTypes'
+import { addToList } from '../hooks/listTablesClient'
 
 export type GeminiChatEntry = {
   message: GeminiMessage
@@ -55,6 +57,16 @@ export default function DiscoverPageClient({ userId }: { userId: string }) {
       }
       setChatEntries([...chatEntries, userEntry, modelEntry])
       setSearch('')
+
+      if (res.recommendations && res.recommendations.length > 0) {
+        Promise.all(
+          res.recommendations.map(rec =>
+            rec.Title
+              ? addToList(userId, rec.Title, ListType.Previous).catch(() => {})
+              : Promise.resolve()
+          )
+        )
+      }
     } catch (err) {
       setError(`Failed to get response: ${err}`)
     } finally {
