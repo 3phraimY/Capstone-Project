@@ -21,13 +21,14 @@ export default function ClientPosterImage({ src, alt, className }: Props) {
   }, [src])
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative overflow-hidden ${className}`}>
       <img
         src={imgError ? fallbackSrc : src}
         alt={alt}
         referrerPolicy='no-referrer'
         className='h-full w-full object-cover'
         onError={() => setImgError(true)}
+        draggable={false}
       />
       {imgError && (
         <span className='absolute inset-0 flex items-center justify-center text-center text-sm font-bold text-black'>

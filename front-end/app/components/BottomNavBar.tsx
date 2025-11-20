@@ -1,6 +1,11 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import {
+  HomeIcon,
+  MagnifyingGlassIcon,
+  RocketLaunchIcon
+} from '@heroicons/react/24/outline'
 
 export default function BottomNavBar() {
   const pathname = usePathname()
@@ -12,24 +17,27 @@ export default function BottomNavBar() {
         <>
           <Link
             href='/'
-            className={pathname === '/' ? 'text-accent font-bold' : ''}
+            className={`flex items-center gap-1 ${
+              pathname === '/' ? 'text-accent font-bold' : ''
+            }`}
           >
+            <HomeIcon className='h-5 w-5' />
             Home
           </Link>
           <Link
             href='/search/-'
-            className={
+            className={`flex items-center gap-1 ${
               pathname.startsWith('/search') ? 'text-accent font-bold' : ''
-            }
+            }`}
           >
+            <MagnifyingGlassIcon className='h-5 w-5' />
             Search
           </Link>
           <Link
             href='/discover'
-            className={
-              pathname.startsWith('/discover') ? 'text-accent font-bold' : ''
-            }
+            className={`flex items-center gap-1 ${pathname.startsWith('/discover') ? 'text-accent font-bold' : ''}`}
           >
+            <RocketLaunchIcon className='h-5 w-5' />
             Discover
           </Link>
         </>

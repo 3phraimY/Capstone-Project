@@ -15,43 +15,61 @@ export default async function Home() {
 
   return (
     <div className='flex w-full flex-col items-center'>
-      <div className='my-4 w-full pt-4 text-center text-2xl font-bold'>
-        Home
-      </div>
+      {PreviousList.length > 0 && (
+        <>
+          <div className='bg-base-100 mt-2 mb-2 ml-4 self-start text-lg font-semibold'>
+            <Link
+              href={`/myLists/${ListType.Previous}`}
+              className='hover:underline'
+            >
+              Previous Recommendations &gt;
+            </Link>
+          </div>
 
-      <div className='mt-2 mb-0 ml-4 self-start text-lg font-semibold'>
-        <Link
-          href={`/myLists/${ListType.Previous}`}
-          className='hover:underline'
-        >
-          Previous Recommendations &gt;
-        </Link>
-      </div>
-      <TitleCarousel titles={PreviousList} />
+          <TitleCarousel titles={PreviousList.reverse()} />
+        </>
+      )}
 
-      <div className='mt-4 mb-0 ml-4 self-start text-lg font-semibold'>
-        <Link href={`/myLists/${ListType.Saved}`} className='hover:underline'>
-          Saved List &gt;
-        </Link>
-      </div>
-      <TitleCarousel titles={SavedList} />
+      {SavedList.length > 0 && (
+        <>
+          <div className='mt-4 mb-2 ml-4 self-start text-lg font-semibold'>
+            <Link
+              href={`/myLists/${ListType.Saved}`}
+              className='hover:underline'
+            >
+              Watch Next &gt;
+            </Link>
+          </div>
+          <TitleCarousel titles={SavedList.reverse()} />
+        </>
+      )}
 
-      <div className='mt-4 mb-0 ml-4 self-start text-lg font-semibold'>
-        <Link href={`/myLists/${ListType.Seen}`} className='hover:underline'>
-          Seen List &gt;
-        </Link>
-      </div>
-      <TitleCarousel titles={SeenList} />
-
-      <div className='mt-4 mb-0 ml-4 self-start text-lg font-semibold'>
-        <Link
-          href={`/myLists/${ListType.Exclusion}`}
-          className='hover:underline'
-        >
-          Exclusion List &gt;
-        </Link>
-      </div>
-      <TitleCarousel titles={ExclusionList} />
+      {SeenList.length > 0 && (
+        <>
+          <div className='mt-4 mb-2 ml-4 self-start text-lg font-semibold'>
+            <Link
+              href={`/myLists/${ListType.Seen}`}
+              className='hover:underline'
+            >
+              Favorites &gt;
+            </Link>
+          </div>
+          <TitleCarousel titles={SeenList.reverse()} />
+        </>
+      )}
+      {ExclusionList.length > 0 && (
+        <>
+          <div className='mt-4 mb-2 ml-4 self-start text-lg font-semibold'>
+            <Link
+              href={`/myLists/${ListType.Exclusion}`}
+              className='hover:underline'
+            >
+              Exclusion List &gt;
+            </Link>
+          </div>
+          <TitleCarousel titles={ExclusionList.reverse()} />
+        </>
+      )}
     </div>
   )
 }

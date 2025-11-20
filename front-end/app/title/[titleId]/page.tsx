@@ -30,16 +30,37 @@ export default async function TitleDetailsPage({
   const inExclusion = exclusionList.some(t => t.IMDbId === title?.IMDbId)
 
   return (
-    <div className='relative mx-auto max-w-xl p-8'>
+    <div className='relative mx-auto p-8'>
       <BackButton />
       {title ? (
         <>
-          <ClientPosterImage
-            src={title.PosterURL}
-            alt={title.Title}
-            className='rounded-box mx-auto mb-4 w-64 shadow'
-          />
-          <h1 className='mb-2 text-2xl font-bold'>{title.Title}</h1>
+          <h1 className='mb-2 text-center text-2xl font-bold'>{title.Title}</h1>
+          <div className='grid grid-cols-2'>
+            <div className=''>
+              <ClientPosterImage
+                src={title.PosterURL}
+                alt={title.Title}
+                className='mx-auto mb-4 max-w-[250px] rounded shadow'
+              />
+            </div>
+            <div className='content-center pl-8'>
+              <div className='mb-2'>
+                <strong>Rating:</strong> {title.Rating}
+              </div>
+              <div className='mb-2'>
+                <strong>Year:</strong> {title.ReleaseYear}
+              </div>
+              <div className='mb-2'>
+                <strong>Runtime:</strong> {title.Runtime}
+              </div>
+              <div className='mb-2'>
+                <strong>Director:</strong> {title.Director}
+              </div>
+              <div className='mb-2'>
+                <strong>Actors:</strong> {title.Actors}
+              </div>
+            </div>
+          </div>
           <AddToListButtons
             title={title}
             inSaved={inSaved}
@@ -49,21 +70,6 @@ export default async function TitleDetailsPage({
           />
           <div className='mb-2'>
             <strong>Plot:</strong> {title.Plot}
-          </div>
-          <div className='mb-2'>
-            <strong>Actors:</strong> {title.Actors}
-          </div>
-          <div className='mb-2'>
-            <strong>Director:</strong> {title.Director}
-          </div>
-          <div className='mb-2'>
-            <strong>Year:</strong> {title.ReleaseYear}
-          </div>
-          <div className='mb-2'>
-            <strong>Rating:</strong> {title.Rating}
-          </div>
-          <div className='mb-2'>
-            <strong>Runtime:</strong> {title.Runtime}
           </div>
         </>
       ) : (

@@ -81,30 +81,39 @@ export default function SearchPage() {
   })
 
   return (
-    <div className='mx-auto max-w-2xl p-8'>
-      <h1 className='mb-6 text-center text-2xl font-bold'>Search</h1>
-      <form className='mb-6 flex gap-2' onSubmit={onSubmit}>
-        <input
-          className='input input-bordered w-full'
-          type='text'
-          placeholder='Search for a movie or show...'
-          value={query}
-          onChange={e => setQuery(e.target.value)}
-          required
-        />
-        <button className='btn btn-accent' type='submit' disabled={loading}>
-          {loading ? 'Searching...' : 'Search'}
-        </button>
-      </form>
-      {error && <div className='text-error mb-4'>{error}</div>}
-      {searched && !loading && results.length === 0 && !error && (
-        <div className='text-center text-gray-500'>No results found.</div>
-      )}
-      <div className='flex flex-wrap gap-6'>
+    <>
+      <div className='mx-auto max-w-2xl p-8'>
+        <form className='mb-6 flex gap-2' onSubmit={onSubmit}>
+          <input
+            className='input input-bordered w-full'
+            type='text'
+            placeholder='Search for a movie or show...'
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            required
+          />
+          <button
+            className='btn btn-accent rounded'
+            type='submit'
+            disabled={loading}
+          >
+            {loading ? 'Searching...' : 'Search'}
+          </button>
+        </form>
+        {error && <div className='text-error mb-4'>{error}</div>}
+        {searched && !loading && results.length === 0 && !error && (
+          <div className='text-center text-gray-500'>No results found.</div>
+        )}
+      </div>
+      <div className='flex flex-wrap place-content-center gap-6'>
         {results.map(result => (
-          <TitlePoster key={result.imdbID} title={toTitle(result)} />
+          <TitlePoster
+            key={result.imdbID}
+            title={toTitle(result)}
+            className='relative aspect-[0.64] w-[40%] max-w-[160px] overflow-hidden rounded shadow'
+          />
         ))}
       </div>
-    </div>
+    </>
   )
 }

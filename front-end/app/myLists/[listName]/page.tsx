@@ -32,15 +32,19 @@ export default async function MyListPage({
   return (
     <div className='relative mx-auto max-w-4xl p-8'>
       <BackButton />
-      <h1 className='mb-6 text-2xl font-bold capitalize'>
+      <h1 className='mb-6 text-center text-2xl font-bold capitalize'>
         {LIST_LABELS[listName]}
       </h1>
       {titles.length === 0 ? (
         <div className='text-center text-gray-500'>No titles in this list.</div>
       ) : (
         <div className='flex flex-wrap justify-start gap-6'>
-          {titles.map(title => (
-            <TitlePoster key={title.TitleId} title={title} />
+          {titles.reverse().map(title => (
+            <TitlePoster
+              key={title.TitleId}
+              title={title}
+              className='h-[250px] w-[160px] rounded shadow'
+            />
           ))}
         </div>
       )}

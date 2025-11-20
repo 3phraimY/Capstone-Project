@@ -1,5 +1,7 @@
 @import 'tailwindcss';
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes: dracula --default;
+}
 
 .hide-scrollbar {
   scrollbar-width: none; /* Firefox */

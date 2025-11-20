@@ -9,6 +9,7 @@ import {
 } from '../hooks/geminiChat'
 import TitlePoster from '../components/TitlePoster'
 import { useChatHistory } from '../context/DiscoverContext'
+import { PaperAirplaneIcon } from '@heroicons/react/24/outline'
 
 export type GeminiChatEntry = {
   message: GeminiMessage
@@ -63,7 +64,6 @@ export default function DiscoverPageClient({ userId }: { userId: string }) {
 
   return (
     <div className='relative min-h-screen w-full pb-20'>
-      <h1 className='mb-6 text-center text-2xl font-bold'>Discover</h1>
       <div className='mt-6 overflow-y-auto px-2 text-left'>
         {chatEntries.length === 0 && (
           <p className='text-lg text-gray-600'>
@@ -95,7 +95,10 @@ export default function DiscoverPageClient({ userId }: { userId: string }) {
                     className='mb-4 flex flex-row items-start gap-4'
                   >
                     <div className='flex w-1/2 justify-center'>
-                      <TitlePoster title={rec.Title!} />
+                      <TitlePoster
+                        title={rec.Title!}
+                        className='h-[250px] w-[160px] rounded shadow'
+                      />
                     </div>
                     <div className='w-1/2'>
                       <strong className='text-lg'>
@@ -116,7 +119,7 @@ export default function DiscoverPageClient({ userId }: { userId: string }) {
       {loading && <div className='text-accent mt-4'>Loading...</div>}
       {error && <div className='text-error mt-4'>{error}</div>}
       <form
-        className='bg-base-100 border-base-300 fixed right-0 bottom-10 left-0 mx-auto flex w-full items-center gap-2 border-t p-4'
+        className='bg-base-100 border-base-300 fixed right-0 bottom-15 left-0 mx-auto flex w-full items-center gap-2 border-t p-4'
         style={{ zIndex: 100 }}
         onSubmit={handleSubmit}
       >
@@ -128,8 +131,12 @@ export default function DiscoverPageClient({ userId }: { userId: string }) {
           onChange={e => setSearch(e.target.value)}
           disabled={loading}
         />
-        <button className='btn btn-accent' type='submit' disabled={loading}>
-          {loading ? 'Sending...' : 'Search'}
+        <button
+          className='btn btn-accent rounded'
+          type='submit'
+          disabled={loading}
+        >
+          <PaperAirplaneIcon className='h-5 w-5' />
         </button>
       </form>
     </div>

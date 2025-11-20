@@ -59,6 +59,13 @@ export default function LoginForm() {
         {error && <div className='text-error'>{error}</div>}
         {success && <div className='text-success'>Login successful!</div>}
       </form>
+      <div className='mt-8 flex justify-center'>Don't have an account? </div>
+      <button
+        className='btn btn-soft flex w-full items-center justify-center border'
+        onClick={() => (window.location.href = '/auth/signup')}
+      >
+        Signup
+      </button>
     </div>
   )
 }

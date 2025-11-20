@@ -1,5 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation'
+import { ArrowUturnLeftIcon } from '@heroicons/react/24/outline'
 
 export default function BackButton() {
   const router = useRouter()
@@ -10,7 +11,7 @@ export default function BackButton() {
       aria-label='Go back'
       type='button'
     >
-      <span className='text-2xl'>←</span>
+      <ArrowUturnLeftIcon className='h-6 w-6' />
     </button>
   )
 }
