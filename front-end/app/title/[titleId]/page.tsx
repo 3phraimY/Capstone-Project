@@ -36,7 +36,7 @@ export default async function TitleDetailsPage({
         <>
           <h1 className='mb-2 text-center text-2xl font-bold'>{title.Title}</h1>
           <div className='grid grid-cols-2'>
-            <div className=''>
+            <div className='self-center'>
               <ClientPosterImage
                 src={title.PosterURL}
                 alt={title.Title}

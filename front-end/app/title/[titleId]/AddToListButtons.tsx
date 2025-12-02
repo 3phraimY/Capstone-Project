@@ -37,7 +37,7 @@ export default function AddToListButtons({
   }
 
   return (
-    <div className='mw-200 mb-4 grid grid-cols-3 flex-wrap justify-center gap-2 place-self-center'>
+    <div className='mw-400 mb-4 grid grid-cols-3 flex-wrap justify-center gap-2 place-self-center'>
       <div>
         <button
           className={`btn flex items-center gap-2 place-self-center rounded ${inSaved ? 'btn-success' : 'btn-outline'}`}

@@ -38,12 +38,12 @@ export default async function MyListPage({
       {titles.length === 0 ? (
         <div className='text-center text-gray-500'>No titles in this list.</div>
       ) : (
-        <div className='flex flex-wrap justify-start gap-6'>
+        <div className='flex flex-wrap place-content-center gap-6'>
           {titles.reverse().map(title => (
             <TitlePoster
               key={title.TitleId}
               title={title}
-              className='h-[250px] w-[160px] rounded shadow'
+              className='relative aspect-[0.64] w-[40%] max-w-[160px] overflow-hidden rounded shadow'
             />
           ))}
         </div>
