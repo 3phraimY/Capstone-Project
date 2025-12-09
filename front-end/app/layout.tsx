@@ -1,6 +1,13 @@
 import './globals.css'
 import BottomNavBar from './components/BottomNavBar'
 import { ChatHistoryProvider } from './context/DiscoverContext'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'ReelTalk',
+  description: 'Discover and discuss movies with ReelTalk!',
+  manifest: '/manifest.webmanifest'
+}
 
 export default function RootLayout({
   children
