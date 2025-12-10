@@ -13,12 +13,14 @@ export default function manifest(): MetadataRoute.Manifest {
       {
         src: '/icon-192x192.png',
         sizes: '192x192',
-        type: 'image/png'
+        type: 'image/png',
+        purpose: 'any'
       },
       {
         src: '/icon-512x512.png',
         sizes: '512x512',
-        type: 'image/png'
+        type: 'image/png',
+        purpose: 'any'
       }
     ],
     screenshots: [
@@ -26,12 +28,13 @@ export default function manifest(): MetadataRoute.Manifest {
         src: '/screenshots/screenshot.png',
         sizes: '317x607',
         type: 'image/png',
-        form_factor: 'wide'
+        form_factor: 'narrow'
       },
       {
-        src: '/screenshots/screenshot.png',
-        sizes: '317x607',
-        type: 'image/png'
+        src: '/screenshots/screenshot-wide.png',
+        sizes: '1903x905',
+        type: 'image/png',
+        form_factor: 'wide'
       }
     ]
   }
