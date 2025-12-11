@@ -43,7 +43,7 @@ async def generate_message_with_mcp(message: str, system_instructions: str, hist
     conversation_history.append({"role": "user", "parts": [{"text": message}]})
 
     response = await gemini_client.aio.models.generate_content(
-        model="gemini-2.0-flash",
+        model="gemini-2.5-flash",
         contents=conversation_history,
         config=types.GenerateContentConfig(
             temperature=0.1,
